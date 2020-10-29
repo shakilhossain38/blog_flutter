@@ -1,4 +1,5 @@
 import 'package:blog_app/components/CaategoryListItem.dart';
+import 'package:blog_app/components/RecentPostList.dart';
 import 'package:blog_app/components/TopPostCard.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -81,6 +82,16 @@ class _MyHomePageState extends State<MyHomePage> {
             padding: const EdgeInsets.all(8.0),
             child: CategoryListItem(),
           ),
+
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("Most Recent Post", style: TextStyle(fontSize: 25.0,fontWeight: FontWeight.bold, fontFamily: 'Roboto'),),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: RecentPostItem(),
+          ),
+
 
 
         ],

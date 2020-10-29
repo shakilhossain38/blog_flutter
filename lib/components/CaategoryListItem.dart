@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:blog_app/pages/SelectCategory.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -9,17 +10,19 @@ class CategoryListItem extends StatefulWidget {
 }
 
 class _CategoryListItemState extends State<CategoryListItem> {
-  List categories= List();
-  Future getAllCategory() async{
-    var url='http://192.168.0.105/blog_flutter/category.php';
-    var response= await http.get(url);
-    if(response.statusCode==200){
-      var jsonData= json.decode(response.body);
+  List categories = List();
+
+  Future getAllCategory() async {
+    var url = 'http://192.168.0.101/blog_flutter/category.php';
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      var jsonData = json.decode(response.body);
       setState(() {
-        categories=jsonData;
+        categories = jsonData;
       });
     }
   }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -36,7 +39,7 @@ class _CategoryListItemState extends State<CategoryListItem> {
           itemCount: categories.length,
           itemBuilder: (context, index) {
             return CategoryItem(
-              name: categories[index]['name'],
+              categoryName: categories[index]['name'],
               createDate: categories[index]['createDate'],
             );
           }),
@@ -45,10 +48,10 @@ class _CategoryListItemState extends State<CategoryListItem> {
 }
 
 class CategoryItem extends StatefulWidget {
-  final name;
+  final categoryName;
   final createDate;
 
-  CategoryItem({this.name, this.createDate});
+  CategoryItem({this.categoryName, this.createDate});
 
   @override
   _CategoryItemState createState() => _CategoryItemState();
@@ -62,14 +65,19 @@ class _CategoryItemState extends State<CategoryItem> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SelectCategory(
+                    categoryName: widget.categoryName,
+                  )));
+            },
             child: Text(
-              widget.name,
+              widget.categoryName,
               style: TextStyle(
                   fontFamily: 'Roboto',
                   fontWeight: FontWeight.bold,
                   fontSize: 18.0,
-                  color: Colors.amber),
+                  color: Colors.blue),
             )),
       ),
     );

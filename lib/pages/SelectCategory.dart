@@ -1,66 +1,66 @@
 import 'dart:convert';
 
 import 'package:blog_app/pages/postDetails.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+class SelectCategory extends StatefulWidget {
 
-class TopPostCard extends StatefulWidget {
+  final categoryName;
+
+  SelectCategory({
+    this.categoryName,
+  });
   @override
-  _TopPostCardState createState() => _TopPostCardState();
+  _SelectCategoryState createState() => _SelectCategoryState();
 }
 
-class _TopPostCardState extends State<TopPostCard> {
-  List postData = List();
-
-  Future showAllPost() async {
-    var url = 'http://192.168.0.101/blog_flutter/postAll.php';
-    var response = await http.get(url, headers: {"Accept": "application/json"});
-    if (response.statusCode == 200) {
-      var jsonData = json.decode(response.body);
-      setState(() {
-        postData = jsonData;
-        //print(postData);
-      });
-    }
+class _SelectCategoryState extends State<SelectCategory> {
+  List categoryByPost= List();
+  Future categoryByData() async{
+    var url= "http://192.168.0.101/blog_flutter/categoryByPost.php";
+    var response= await http.post(url, body: {'name': widget.categoryName});
+    if(response.statusCode==200)
+      {
+        var jsonData= json.decode(response.body);
+        setState(() {
+          categoryByPost= jsonData;
+        });
+      }
+    print(categoryByPost);
   }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    showAllPost();
+    categoryByData();
   }
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 200.0,
-      width: MediaQuery.of(context).size.width,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-          itemCount: postData.length == null
-              ? CircularProgressIndicator()
-              : postData.length,
-          itemBuilder: (context, index) {
-            return NewPostItem(
-              title: postData[index]['title'],
-              author: postData[index]['author'],
-              categoryName: postData[index]['categoryName'],
-              image:
-                  "http://192.168.0.101/blog_flutter/uploads/${postData[index]['image']}",
-              postDate: postData[index]['postDate'],
-              comments: postData[index]['comments'],
-              totalLike: postData[index]['totalLike'],
-              body: postData[index]['body'],
-              createDate: postData[index]['createDate'],
-            );
-          }),
+    return Scaffold(
+      appBar: AppBar(title: Center(child: Text(widget.categoryName)),),
+      body: Container(
+        child: ListView.builder(
+            itemCount: categoryByPost.length,
+            itemBuilder: (context,index){
+          return PostItem(
+            title: categoryByPost[index]['title'],
+            author: categoryByPost[index]['author'],
+            categoryName: categoryByPost[index]['categoryName'],
+            image:
+            "http://192.168.0.101/blog_flutter/uploads/${categoryByPost[index]['image']}",
+            postDate: categoryByPost[index]['postDate'],
+            comments: categoryByPost[index]['comments'],
+            totalLike: categoryByPost[index]['totalLike'],
+            body: categoryByPost[index]['body'],
+            createDate: categoryByPost[index]['createDate'],
+
+          );
+        }),
+      ),
     );
   }
 }
-
-class NewPostItem extends StatefulWidget {
+class PostItem extends StatefulWidget {
   final image;
   final author;
   final postDate;
@@ -71,22 +71,22 @@ class NewPostItem extends StatefulWidget {
   final categoryName;
   final createDate;
 
-  NewPostItem(
+  PostItem(
       {this.body,
-      this.image,
-      this.author,
-      this.title,
-      this.categoryName,
-      this.comments,
-      this.createDate,
-      this.totalLike,
-      this.postDate});
+        this.image,
+        this.author,
+        this.title,
+        this.categoryName,
+        this.comments,
+        this.createDate,
+        this.totalLike,
+        this.postDate});
 
   @override
-  _NewPostItemState createState() => _NewPostItemState();
+  _PostItemState createState() => _PostItemState();
 }
 
-class _NewPostItemState extends State<NewPostItem> {
+class _PostItemState extends State<PostItem> {
   @override
   Widget build(BuildContext context) {
     return Stack(

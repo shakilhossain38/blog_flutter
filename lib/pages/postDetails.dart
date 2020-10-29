@@ -40,7 +40,7 @@ class PostDetails extends StatelessWidget {
               Container(
                 // height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
-                child: Image.network(image),),
+                child: Image.network(image,height: 250,),),
               SizedBox(height: 20.0,),
               Text(body,style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Roboto', fontSize: 22.0),),
               SizedBox(height: 20.0,),

@@ -61,7 +61,7 @@ class _CategoryItemState extends State<CategoryItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70.0,
+      //height: 10.0,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: InkWell(
